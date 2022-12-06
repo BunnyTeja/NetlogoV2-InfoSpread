@@ -108,7 +108,7 @@ Amplification-of-IP ; Ip specific
 censure ; Ip specific
 IP-id ;IP specific
 Related-topic-id ;IP specific
-
+Location ;IP specific
 
 Ref_id_to_Info_Atrifact;;A reference ID to the original source information artifact.
 Triad;;A Triad
@@ -160,7 +160,7 @@ while [ i < nb-basic-agents] [
 let data csv:from-row file-read-line
 ; now we can use that list to create a turtle with the saved properties
 create-turtles 1 [
-  set size  item 0 data
+  set size  1
   set agent-ID item 1 data
   let xcor1 random-xcor
   let ycor1 random-ycor
@@ -242,7 +242,7 @@ while [ i < nb-physical-event-agents] [
 let data csv:from-row file-read-line
 ; now we can use that list to create a turtle with the saved properties
 create-turtles 1 [
-  set size  item 0 data
+  set size  1
   set agent-ID item 1 data
   let xcor1 random-xcor
   let ycor1 random-ycor
@@ -285,7 +285,7 @@ while [ i < nb-live-agents] [
 let data csv:from-row file-read-line
 ; now we can use that list to create a turtle with the saved properties
 create-turtles 1 [
-  set size  item 0 data
+  set size  1
   set agent-ID item 1 data
   let xcor1 random-xcor
   let ycor1 random-ycor
@@ -323,7 +323,7 @@ while [ i < nb-information-diss-agents] [
 let data csv:from-row file-read-line
 ; now we can use that list to create a turtle with the saved properties
 create-turtles 1 [
-  set size  item 0 data
+  set size  1
   set agent-ID item 1 data
   let xcor1 random-xcor
   let ycor1 random-ycor
@@ -367,7 +367,7 @@ while [ i < nb-spokesperson-agents] [
 let data csv:from-row file-read-line
 ; now we can use that list to create a turtle with the saved properties
 create-turtles 1 [
-  set size  item 0 data
+  set size  1
   set agent-ID item 1 data
   let xcor1 random-xcor
   let ycor1 random-ycor
@@ -405,7 +405,7 @@ while [ i < nb-flow-manipulator-agents] [
 let data csv:from-row file-read-line
 ; now we can use that list to create a turtle with the saved properties
 create-turtles 1 [
-  set size  item 0 data
+  set size  1
   set agent-ID item 1 data
   let xcor1 random-xcor
   let ycor1 random-ycor
@@ -442,10 +442,10 @@ if nb-basic-agents >=  nb-information-diss-agents + nb-physical-event-agents + n
   assign-color
   clear-count
 
-if In-links?
-[make-network-in]
-if out-links?
-[make-network-out]
+;if In-links?
+make-network-in
+;if out-links?
+make-network-out
 reset-ticks
 ]
 
@@ -528,7 +528,8 @@ while [ i < count-agents ] [
         ifelse member? temp-in-ip received-IP-list [
         ][set received-IP-list lput temp-in-ip received-IP-list]
         ]
-        create-link-with turtle j
+         if In-links?
+          [create-link-with turtle j ] ; This draws a line between the agents it's just for representation
         set k k + 1
         set nb-connections-in k
       ]
@@ -573,7 +574,9 @@ while [ i < count-agents ] [
 
     if value = 1[
      ask turtle i [
-        create-link-with turtle j
+
+          if out-links?
+          [create-link-with turtle j]  ; This draws a line between the agents it's just for representation
         set k k + 1
         set nb-connections-out k
       ]
@@ -700,6 +703,7 @@ create-turtles 1 [
   set agent-type item 2 data
   set Related-topic-id item 3 data
   set IP-id item 4 data
+      set Location item 4 data
       set Triad ["topic-1" "group-1" 1.5]
   set shape "square"
 ]
@@ -725,7 +729,7 @@ profiler:start         ;; start profiling
 
 repeat 5[
    ;export-world "infoex.csv"
-  ;write-to-file
+  write-to-file
   ;writeIPs-to-file
   ;writetopics-to-file
   ;writegroupss-to-file
@@ -1705,7 +1709,7 @@ nb-basic-agents
 nb-basic-agents
 1
 980
-5.0
+120.0
 1
 1
 NIL
@@ -1735,7 +1739,7 @@ nb-live-agents
 nb-live-agents
 0
 10
-1.0
+2.0
 1
 1
 NIL
@@ -1780,7 +1784,7 @@ nb-Information-diss-agents
 nb-Information-diss-agents
 1
 100
-1.0
+8.0
 1
 1
 NIL
@@ -1795,7 +1799,7 @@ nb-physical-event-agents
 nb-physical-event-agents
 0
 5
-0.0
+2.0
 1
 1
 NIL
@@ -1821,7 +1825,7 @@ average-IP-sharing-tendency
 average-IP-sharing-tendency
 0
 100
-80.0
+30.0
 10
 1
 NIL
@@ -1836,7 +1840,7 @@ average-IP-reading-tendency
 average-IP-reading-tendency
 0
 100
-80.0
+30.0
 5
 1
 NIL
